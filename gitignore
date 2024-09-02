@@ -1,0 +1,15 @@
+```gitgnore
+#arquivos python complidos
+*.pyc
+__pycache__/
+
+#ambiente virtual
+venv/
+ambiente/
+
+#IDEs
+.vscode/
+.ideai/
+
+# Arquivos de sistema
+.DS_Loja
