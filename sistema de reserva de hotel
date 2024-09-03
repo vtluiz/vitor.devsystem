@@ -1,0 +1,94 @@
+-- reservas de hotel
+CREATE DATABASE SistemaReservasHotel;
+
+CREATE TABLE hospedes (
+hospedeID INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR (100) NOT NULL,
+endereco VARCHAR (255),
+telefone VARCHAR (15),
+email VARCHAR (100),
+documentoIdentidade VARCHAR (50)
+);
+
+CREATE TABLE Quartos (
+    QuartoID INT PRIMARY KEY AUTO_INCREMENT,
+    NumeroQuarto INT NOT NULL,
+    TipoQuarto VARCHAR(50),
+    PrecoPorNoite DECIMAL(10, 2),
+    Status VARCHAR(20) -- Disponível, Ocupado, Manutenção
+);
+
+CREATE TABLE Reservas (
+    ReservaID INT PRIMARY KEY AUTO_INCREMENT,
+    HospedeID INT,
+    QuartoID INT,
+    DataEntrada DATE,
+    DataSaida DATE,
+    Status VARCHAR(20), -- Confirmada, Cancelada, Concluída
+    FOREIGN KEY (HospedeID) REFERENCES Hospedes(HospedeID),
+    FOREIGN KEY (QuartoID) REFERENCES Quartos(QuartoID)
+);
+
+CREATE TABLE Pagamentos (
+    PagamentoID INT PRIMARY KEY AUTO_INCREMENT,
+    ReservaID INT,
+    Valor DECIMAL(10, 2),
+    DataPagamento DATE,
+    MetodoPagamento VARCHAR(50), -- Cartão de Crédito, Dinheiro, Transferência
+    FOREIGN KEY (ReservaID) REFERENCES Reservas(ReservaID)
+);
+-- cadastrar hospede
+ INSERT INTO hospedes (nome, endereço, telefone, email, identidade) VALUES
+ ('João Silva', 'Rua A, 123', '123456789', 'joao@gmail.com', '12345678900'),
+('Maria Oliveira', 'Rua B, 456', '987654321', 'maria@gmail.com', '09876543211');
+
+-- inserindo quartos
+INSERT INTO quartos ( numeroquarrto, tipoquarto, precopornoite, status) VALUES
+(101, 'Single', 150.00, 'Disponível'),
+(102, 'Double', 200.00, 'Disponível');
+
+-- reserva
+INSERT INTO reserva (HospedeID, QuartoID, DataEntrada, DataSaida, Status) VALUES
+(1, 101, '2024-09-10', '2024-09-15', 'Confirmada'),
+(2, 102, '2024-09-12', '2024-09-17', 'Confirmada');
+
+-- pagamento
+INSERT INTO pagamento (pagamento, reserva, valor, datapagamento, metodopagamento) VALUES
+(1, 750.00, '2024-09-01', 'Cartão de Crédito'),
+(2, 1000.00, '2024-09-05', 'Dinheiro');
+
+-- reserva confirmada
+SELECT * FROM reserva WHERE Status = 'confirmada';
+
+-- ver hospede e sua reserva
+SELECT Hospedes.Nome, Reservas.DataEntrada, Reservas.DataSaida, Quartos.NumeroQuarto
+FROM Reservas
+JOIN Hospedes ON Reservas.HospedeID = Hospedes.HospedeID
+JOIN Quartos ON Reservas.QuartoID = Quartos.QuartoID;
+
+-- Consultar Reservas Confirmadas
+SELECT * FROM Reservas WHERE Status = 'Confirmada';
+
+-- Consultar Hóspedes e suas Reservas
+SELECT Hospedes.Nome, Reservas.DataEntrada, Reservas.DataSaida, Quartos.NumeroQuarto
+FROM Reservas
+JOIN Hospedes ON Reservas.HospedeID = Hospedes.HospedeID
+JOIN Quartos ON Reservas.QuartoID = Quartos.QuartoID;
+
+-- Consultar Quartos Disponíveis
+SELECT * FROM Quartos WHERE Status = 'Disponível';
+
+-- Atualizar o Status de um Quarto após a Saída de um Hóspede
+UPDATE Quartos
+SET Status = 'Disponível'
+WHERE QuartoID = 101;
+
+-- Atualizar o Status de uma Reserva para Concluída
+UPDATE Reservas
+SET Status = 'Concluída'
+WHERE ReservaID = 1;
+
+-- Excluir uma Reserva Cancelada
+DELETE FROM Reservas WHERE ReservaID = 2;
+
+
