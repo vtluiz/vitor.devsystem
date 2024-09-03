@@ -1,0 +1,67 @@
+CREATE DATABASE gestaofuncionarios;
+
+CREATE TABLE departamento (
+departamentoID INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR (50) NOT NULL
+);
+
+CREATE TABLE Funcionarios (
+    FuncionarioID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(100) NOT NULL,
+    Endereco VARCHAR(255),
+    Telefone VARCHAR(15),
+    Email VARCHAR(100),
+    DataNascimento DATE,
+    DataContratacao DATE,
+    CargoID INT,
+    DepartamentoID INT,
+    FOREIGN KEY (CargoID) REFERENCES Cargos(CargoID),
+    FOREIGN KEY (DepartamentoID) REFERENCES Departamentos(DepartamentoID)
+);
+
+CREATE TABLE Salarios (
+    SalarioID INT PRIMARY KEY AUTO_INCREMENT,
+    FuncionarioID INT,
+    DataVigencia DATE,
+    Salario DECIMAL(10, 2),
+    FOREIGN KEY (FuncionarioID) REFERENCES Funcionarios(FuncionarioID)
+);
+
+-- acrescento do chatgpt
+CREATE TABLE AvaliacoesDesempenho (
+    AvaliacaoID INT PRIMARY KEY AUTO_INCREMENT,
+    FuncionarioID INT,
+    DataAvaliacao DATE,
+    Desempenho VARCHAR(50), -- Exemplary, Satisfactory, Needs Improvement
+    Comentarios TEXT,
+    FOREIGN KEY (FuncionarioID) REFERENCES Funcionarios(FuncionarioID)
+);
+
+INSERT INTO funcinario (funcionario, endereço, telefone, email, datanascimento, datacontratação, cargo, departamento) VALUES
+('Ana Souza', 'Rua A, 123', '123456789', 'ana.souza@gmail.com', '1990-05-10', '2023-01-15', 1, 2),
+('Carlos Pereira', 'Rua B, 456', '987654321', 'carlos.pereira@gmail.com', '1985-08-20', '2022-03-10', 2, 1);
+
+INSERT INTO salario (salario, funcionarioID, datavigencia) VALUES 
+ (1, '2023-01-15', 3000.00),
+(2, '2022-03-10', 5000.00);
+
+INSERT INTO departamentos (nomedepartamento) VALUES
+('Recursos Humanos'),
+('TI'),
+('Financeiro');
+
+-- acrescento do chatgpt
+INSERT INTO AvaliacoesDesempenho (FuncionarioID, DataAvaliacao, Desempenho, Comentarios) VALUES
+(1, '2024-08-01', 'Exemplary', 'Excelente desempenho no último projeto.'),
+(2, '2024-07-20', 'Satisfactory', 'Bom desempenho, mas há espaço para melhorias.');
+
+SELECT Funcionarios.Nome, Salarios.Salario, Salarios.DataVigencia
+FROM salarios
+join Funcionarios ON Salarios.FuncionarioID = Funcionarios.FuncionarioID;
+
+-- acrescento chatgpt
+UPDATE Funcionarios
+SET CargoID = 3
+WHERE FuncionarioID = 2;
+
+DELETE FROM funcionarios WHERE funcionarios = 2;
