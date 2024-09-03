@@ -1,0 +1,58 @@
+CREATE DATABASE SistemaControleEstoque;
+
+CREATE TABLE Fornecedores (
+    FornecedorID INT PRIMARY KEY IDENTITY(1,1),
+    Nome VARCHAR(100) NOT NULL,
+    Endereco VARCHAR(255),
+    Telefone VARCHAR(15),
+    Email VARCHAR(100)
+);
+
+CREATE TABLE Produtos (
+    ProdutoID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(100) NOT NULL,
+    Descricao VARCHAR(255),
+    Preco DECIMAL(10, 2),
+    QuantidadeEmEstoque INT,
+    FornecedorID INT,
+    FOREIGN KEY (FornecedorID) REFERENCES Fornecedores(FornecedorID)
+);
+CREATE TABLE PedidosReposicao (
+    PedidoID INT PRIMARY KEY AUTO_INCREMENT,
+    ProdutoID INT,
+    DataPedido DATE,
+    Quantidade INT,
+    Status VARCHAR(50),
+    FOREIGN KEY (ProdutoID) REFERENCES Produtos(ProdutoID)
+);
+
+INSERT INTO Fornecedores (Nome, Endereco, Telefone, Email) VALUES
+('Fornecedor A', 'Rua A, 123', '123456789', 'contato@fornecedora.com'),
+('Fornecedor B', 'Rua B, 456', '987654321', 'contato@fornecedorb.com');
+
+INSERT INTO Produtos (Nome, Descricao, Preco, QuantidadeEmEstoque, FornecedorID) VALUES
+('Produto 1', 'Descrição do Produto 1', 10.50, 100, 1),
+('Produto 2', 'Descrição do Produto 2', 20.00, 50, 2);
+
+INSERT INTO PedidosReposicao (ProdutoID, DataPedido, Quantidade, Status) VALUES
+(1, '2024-09-01', 50, 'Pendente'),
+(2, '2024-09-02', 30, 'Concluído');
+
+SELECT * FROM PedidosReposicao;
+SELECT * FROM PedidosReposicao;
+SELECT * FROM Fornecedores;
+
+SELECT Produtos.Nome AS Produto, Fornecedores.Nome AS Fornecedor
+FROM Produtos
+JOIN Fornecedores ON Produtos.FornecedorID = Fornecedores.FornecedorID;
+
+UPDATE Produtos
+SET QuantidadeEmEstoque = QuantidadeEmEstoque + 50
+WHERE ProdutoID = 1;
+
+DELETE FROM Produtos WHERE ProdutoID = 2;
+
+DELETE FROM Fornecedores WHERE FornecedorID = 2;
+
+
+
